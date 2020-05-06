@@ -9,5 +9,10 @@ namespace SpringBlog.ViewModels
     public class HomeIndexViewModel
     {
         public List<Post> Posts { get; set; }
+
+        //secili kategori null olursa seçili değildir.
+        public Category Category { get; set; }
+
+        public string SearchTerm { get; set; }
     }
 }

@@ -24,11 +24,13 @@
                         <td>@item.Id</td>
                         <td>@item.CategoryName</td>
                         <td>
-                            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-info">
+                            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">
                                 <i class="fas fa-edit"></i>
+                                Edit
                             </a>
                             <a href="#" class="btn btn-danger" data-delete-id="@item.Id" data-delete-name="@item.CategoryName" data-delete-action="@Url.Action("Delete")">
                                 <i class="fas fa-trash"></i>
+                                Delete
                             </a>
                         </td>
                     </tr>

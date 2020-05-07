@@ -5,13 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using X.PagedList;
 
 namespace SpringBlog.Controllers
 {
     public class HomeController : BaseController
     {
-        public ActionResult Index(string q,int? cid)
+        public ActionResult Index(string q,int? cid,int page=1)
         {
+            var pageSize = 10;
             IQueryable<Post> posts = db.Posts;
             Category category = null;  //olurda cid e girmezse bunu atamış olucaz
 
@@ -38,9 +40,10 @@ namespace SpringBlog.Controllers
             {
 
                 //Posts = db.Posts.OrderByDescending(x => x.CreationTime).ToList()
-                Posts = posts.OrderByDescending(x => x.CreationTime).ToList(),
+                Posts = posts.OrderByDescending(x => x.CreationTime).ToPagedList(page, pageSize),
                 Category=category,
-                SearchTerm=q
+                SearchTerm=q,
+                CategoryId=cid
             };
 
             return View(vm);
@@ -52,7 +55,6 @@ namespace SpringBlog.Controllers
 
             return View();
         }
-
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

@@ -8,7 +8,7 @@
 <div class="show-post">
     @if (!string.IsNullOrEmpty(Model.PhotoPath))
     {
-        <img src="@Url.FeaturedImage(Model.PhotoPath)" alt="Post Featured Image" />
+        <img class="mb-3" src="@Url.FeaturedImage(Model.PhotoPath)" alt="Post Featured Image" />
     }
     @Html.Raw(Model.Content)
 </div>

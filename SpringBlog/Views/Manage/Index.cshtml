@@ -121,7 +121,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="btnUpload" type="button" class="btn btn-primary">Crop &amp; Upload</button>
+                <button id="btnUpload" type="button" class="btn btn-primary" disabled>Crop &amp; Upload</button>
             </div>
         </div>
     </div>
@@ -134,6 +134,19 @@
 
         $("#file-input").change(function () {
             readFile(this);
+            //resim secilme anında crop butonu aktif olsun. başta disabled
+
+            if (this.files && this.files[0]) {
+                $("#btnUpload").removeAttr("disabled");
+            }
+            else {  //bunu silmeyeceksek croppie yi destroy etmeliyiz cancel durumunda
+                $("#btnUpload").attr("disabled","disabled");
+            if (cropper) {  //foto secilmeden kapatıldıysa  zAaten null  , olmayan bir şeyi nasıl destroy edeyim. Olan bişey olmalı
+
+                cropper.croppie('destroy');
+                cropper = null;
+            }
+            }
         });
 
         function readFile(input) {
@@ -160,6 +173,7 @@
         $('#modalChangePhoto').on('hidden.bs.modal', function (e) {
             $("#file-input").val(null);
             $(".custom-file-label").text("Choose a file");
+            $("#btnUpload").attr("disabled", "disabled");
 
             if (cropper) {  //foto secilmeden kapatıldıysa  zAaten null  , olmayan bir şeyi nasıl destroy edeyim. Olan bişey olmalı
 
@@ -169,13 +183,26 @@
         });
 
         $("#btnUpload").click(function () {
+
+            if (!cropper) {
+                return;
+            }
+
             cropper.croppie('result', {   //cropper dan result al.
                 type: "base64",    //base64 olarak al.
                 size: { width: 400, height: 400 }
             }).then(function (base64) {   //alma işi bitince bu function u calıstır
-                $("#profilePhoto").attr("src", base64);
+                //bunu profil fotonun src sine koy.
+                //$("#profilePhoto").attr("src", base64);
+
                 /* $("#result").html(img);*/ //bunu konsola bas.
                 //console.log(base64);  //buda base 64 olarak alıyor.
+
+                //sunuucu veriyi uploadBase64 ismiyle bekliyor (ManageController UploadProfilePhoto). gönderdiği seyin ismi de base64
+                $.post("@Url.Action("UploadProfilePhoto")", { photoBase64: base64 }, function (data) {
+                    $("#profilePhoto").attr("src", data.photoUrl);
+                    $('#modalChangePhoto').modal('hide'); // hide olduktan sonra üstteki fonksiyon calıscak destroy edilciek
+                });
             });
 
         });

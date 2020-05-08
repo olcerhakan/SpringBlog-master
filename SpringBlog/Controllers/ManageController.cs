@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using SpringBlog.Helpers;
 using SpringBlog.Models;
 
 namespace SpringBlog.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -320,6 +322,27 @@ namespace SpringBlog.Controllers
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+        }
+
+        [HttpPost]
+        public ActionResult UploadProfilePhoto(string photoBase64)
+        {
+            if (string.IsNullOrEmpty(photoBase64))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //kaydedince bi dosya adı geliyordu. bunu login olan kullanıcının db sine kaydetcez
+           string fileName = this.SaveProfilePhoto(photoBase64);
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            //user in once mevcut fotosunu siliyoruz.
+            this.DeleteImage(user.ProfilePhoto, "Profiles");
+            //profil foto alanına yeni yüklenmiş dosya koyulacak
+            user.ProfilePhoto = fileName;
+            db.SaveChanges();
+
+            //anonim nesne olarak döndürelim
+            return Json(new {photoUrl = Url.ProfilePhoto(fileName)});
         }
 
         protected override void Dispose(bool disposing)

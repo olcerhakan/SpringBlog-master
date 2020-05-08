@@ -10,12 +10,20 @@
     <h4>Change your account settings</h4>
     <hr />
 
-    <div class="manage-profile-photo-container float-right text-center">
-        <a href="#" class="small" data-toggle="modal" data-target="#modalChangePhoto">
-            @*<img src="@Url.ProfilePhoto(User.Identity.ProfilePhoto())" alt="Profile Photo" />*@
-            <img id="profilePhoto" src="@Url.LoggedInProfilePhoto()" alt="Profile Photo" width="100" /> <br />
-            Change Photo
-        </a>
+    <div class="float-right position-relative">
+
+        <div class="dropdown mt-1 position-absolute" style="bottom: 3px; right: 3px;">
+            <button class="btn btn-light btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item small" href="#" data-toggle="modal" data-target="#modalChangePhoto">Change Photo</a>
+                <a class="dropdown-item small" href="#" id="btnDeletePhoto">Delete</a>
+            </div>
+        </div>
+
+        <img id="profilePhoto" class="rounded" src="@Url.LoggedInProfilePhoto()" alt="profile photo" width="150" /> <br />
+
     </div>
 
     <dl class="dl-horizontal">
@@ -127,25 +135,24 @@
     </div>
 </div>
 
+@section scripts {
 
-@section scripts{
     <script>
         var cropper = null;
 
         $("#file-input").change(function () {
             readFile(this);
-            //resim secilme anında crop butonu aktif olsun. başta disabled
+             //resim secilme anında crop butonu aktif olsun. başta disabled
 
             if (this.files && this.files[0]) {
                 $("#btnUpload").removeAttr("disabled");
             }
-            else {  //bunu silmeyeceksek croppie yi destroy etmeliyiz cancel durumunda
-                $("#btnUpload").attr("disabled","disabled");
-            if (cropper) {  //foto secilmeden kapatıldıysa  zAaten null  , olmayan bir şeyi nasıl destroy edeyim. Olan bişey olmalı
-
-                cropper.croppie('destroy');
-                cropper = null;
-            }
+            else {          //bunu silmeyeceksek croppie yi destroy etmeliyiz cancel durumunda
+                $("#btnUpload").attr("disabled", "disabled");
+                if (cropper) {
+                    cropper.croppie('destroy');
+                    cropper = null;
+                }
             }
         });
 
@@ -153,13 +160,11 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
-                reader.onload = function (e) {  //dosya okuması bittğinde bunu calıstır.
-                    if (cropper == null) {//ilk okuma anında null sa croppie yi başlat.
+                reader.onload = function (e) {          //dosya okuması bittğinde bunu calıstır.
+                    if (cropper == null)                 //ilk okuma anında null sa croppie yi başlat.
                         cropper = $('.cropper').croppie();
-                    }
 
-                    $('.cropper').croppie('bind', {
-                        //okunan bir resimse base64 olarak img yer alıyor. bunu croppie e bağla. js olarak dahil edicez.. cropper class lı resmin içinde dahil et.
+                    cropper.croppie('bind', {               //okunan bir resimse base64 olarak img yer alıyor. bunu croppie e bağla. js olarak dahil edicez.. cropper class lı resmin içinde dahil et.
                         url: e.target.result
                     });
                 }
@@ -172,11 +177,10 @@
         //bu adlı modal gizlendiğinde croppie yi yok et. yani foto koymaktan vazgecince.
         $('#modalChangePhoto').on('hidden.bs.modal', function (e) {
             $("#file-input").val(null);
-            $(".custom-file-label").text("Choose a file");
+            $(".custom-file-label").text("Choose file");
             $("#btnUpload").attr("disabled", "disabled");
 
-            if (cropper) {  //foto secilmeden kapatıldıysa  zAaten null  , olmayan bir şeyi nasıl destroy edeyim. Olan bişey olmalı
-
+            if (cropper) {               //foto secilmeden kapatıldıysa  zAaten null  , olmayan bir şeyi nasıl destroy edeyim. Olan bişey olmalı
                 cropper.croppie('destroy');
                 cropper = null;
             }
@@ -188,25 +192,29 @@
                 return;
             }
 
-            cropper.croppie('result', {   //cropper dan result al.
-                type: "base64",    //base64 olarak al.
-                size: { width: 400, height: 400 }
-            }).then(function (base64) {   //alma işi bitince bu function u calıstır
-                //bunu profil fotonun src sine koy.
-                //$("#profilePhoto").attr("src", base64);
-
-                /* $("#result").html(img);*/ //bunu konsola bas.
-                //console.log(base64);  //buda base 64 olarak alıyor.
-
+            cropper.croppie('result', {  //cropper dan result al.
+                type: "base64",         //base64 olarak al
+                size: { width: 400, height: 400 } 
+            }).then(function (base64) {            //alma işi bitince bu function u calıstır 
                 //sunuucu veriyi uploadBase64 ismiyle bekliyor (ManageController UploadProfilePhoto). gönderdiği seyin ismi de base64
                 $.post("@Url.Action("UploadProfilePhoto")", { photoBase64: base64 }, function (data) {
-                    $("#profilePhoto").attr("src", data.photoUrl);
-                    $('#modalChangePhoto').modal('hide'); // hide olduktan sonra üstteki fonksiyon calıscak destroy edilciek
-                });
+                    //bunu profil fotonun src sine koy.
+                    $("#profilePhoto").attr('src', data.photoUrl);
+                    // hide olduktan sonra üstteki fonksiyon calıscak destroy edilciek
+                    $("#modalChangePhoto").modal('hide');
+                })
+
             });
 
         });
 
+        $("#btnDeletePhoto").click(function () {
+
+            $.post("@Url.Action("DeleteProfilePhoto")", function (data) {
+                $("#profilePhoto").attr('src', data.photoUrl);
+            });
+
+        });
     </script>
 
 }

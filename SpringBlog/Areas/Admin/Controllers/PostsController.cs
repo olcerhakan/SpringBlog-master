@@ -129,10 +129,5 @@ namespace SpringBlog.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public string ConvertToSlug(string title)
-        {
-            return UrlService.URLFriendly(title);
-        }
     }
 }

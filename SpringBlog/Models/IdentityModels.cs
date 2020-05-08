@@ -21,10 +21,11 @@ namespace SpringBlog.Models
             return userIdentity;
         }
 
-        [MaxLength(30)]
+        [Required]
+        [StringLength(30)]
         public string DisplayName { get; set; }
 
-        [MaxLength(100)]
+        [StringLength(100)]
         public string ProfilePhoto { get; set; }
 
 

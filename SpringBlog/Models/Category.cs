@@ -15,6 +15,11 @@ namespace SpringBlog.Models
         [Display(Name = "Category Name")]
         public string CategoryName { get; set; }
 
+        [Required]
+        [StringLength(30)]
+        [Display(Name = "Short Url")]
+        public string Slug { get; set; }
+
 
         public virtual ICollection<Post> Posts { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿$(function () {
+    bsCustomFileInput.init();
 
     $("#frmSearch").submit(function (event) {
 
@@ -10,5 +11,8 @@
             event.preventDefault();
         }
     });
+
+
+    
     
 });

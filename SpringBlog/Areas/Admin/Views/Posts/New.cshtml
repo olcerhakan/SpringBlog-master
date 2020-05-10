@@ -64,7 +64,7 @@
 
 
 @section scripts {
-    <script>
+    @*<script>
         $(function () {
             $("#Title").change(function () {
                 if (!$("#Slug").val()) {
@@ -87,5 +87,10 @@
                 });
             }
         });
+        </script>
+        *@
+    <script>
+        slug.run("#Title", "#Slug", "#refreshSlug");
     </script>
+   
 }

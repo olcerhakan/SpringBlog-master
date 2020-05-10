@@ -82,7 +82,7 @@
 
 @section scripts {
     <script>
-        $(function () {
+        @*$(function () {
             //if ($("#CurrentFeaturedImage").val()) {
 
             //    $("#currentFeaturedImageLabel").text($("#CurrentFeaturedImage").val());
@@ -108,6 +108,10 @@
                     $("#Slug").trigger("blur"); // in order to trigger validation
                 });
             }
-        });
+        });*@
+
+        
+        slug.run("#Title", "#Slug", "#refreshSlug");
+    
     </script>
 }

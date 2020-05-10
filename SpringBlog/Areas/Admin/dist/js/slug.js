@@ -1,4 +1,5 @@
-﻿function slugFunc() {
+﻿
+function slugFunc() {
 
     this.ajaxUrl = null;
 
@@ -8,6 +9,19 @@
 
     this.run = function (sourceSelector, targetSelector, refreshSelector) {
 
+        var _ajaxUrl = this.ajaxUrl;
+
+        function generateSlug() {
+            console.log(_ajaxUrl);
+            var title = $(sourceSelector).val();
+            if (!title) return;
+
+            $.post(_ajaxUrl, { title: title }, function (data) {
+                $(targetSelector).val(data);
+                $(targetSelector).trigger("blur"); // in order to trigger validation
+            });
+        }
+
         $(sourceSelector).change(function () {
             if (!$(targetSelector).val()) {
                 generateSlug();
@@ -16,18 +30,8 @@
 
         $(refreshSelector).click(function (event) {
             event.preventDefault();
-            this.generateSlug();
+            generateSlug();
         });
-
-        this.generateSlug=function() {
-            var title = $(sourceSelector).val();
-            if (!title) return;
-
-            $.post(this.ajaxUrl, { title: title }, function (data) {
-                $(targetSelector).val(data);
-                $(targetSelector).trigger("blur"); // in order to trigger validation
-            });
-        }
 
     };
 }

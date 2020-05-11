@@ -30,6 +30,8 @@ namespace SpringBlog.Models
 
 
         public virtual ICollection<Post> Posts { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -52,10 +54,26 @@ namespace SpringBlog.Models
                 .HasForeignKey(x => x.CategoryId)
                 .WillCascadeOnDelete(false);
 
+           
+            //Yazar silinince postları , postları silinince yorumları zaten silineceği için 
+            //yazarı silinince doğrudan yorumlarını sildirmeye gerek yok.
+            //aksi takdirde birden çok cascade path'i (yolu) oluşarak hataya sebebiyet veriyor.
+            modelBuilder.Entity<Comment>()
+              //bir yorumun optional olarak parenti vardır
+              .HasRequired(x => x.Author)
+              //bu parentin bir çok cocugu vardır
+              .WithMany(x => x.Comments)
+              //commentin foreign keyı x.ParenId dir
+              .HasForeignKey(x => x.AuthorId)
+               //bunun parentini silince bunu siliyim mi evet .
+               .WillCascadeOnDelete(false);
+               
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Post> Posts { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
     }
 }

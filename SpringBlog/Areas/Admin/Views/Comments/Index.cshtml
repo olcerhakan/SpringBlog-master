@@ -16,8 +16,8 @@
                     <th>Content</th>
                     <th>Author</th>
                     <th>Post Title</th>
-                    <th>Creation Time</th>
-                    <th>Is Published</th>
+                    <th>Time</th>
+                    <th>Published</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -26,7 +26,14 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.Content</td>
+                        <td>
+                            @item.Content
+                            @if (item.Parent != null)
+                            {
+                                <br />
+                                <small>(Reply to the comment #@item.Parent.Id  ) </small>
+                            }
+                        </td>
                         <td>@item.Author.DisplayName</td>
                         <td>@item.Post.Title</td>
                         <td>@item.CreationTime.Value</td>
@@ -45,10 +52,10 @@
                                    data-on-color="success" data-on-text="YES" data-off-text="NO">*@
                         </td>
                         <td>
-                            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">
+                            @*<a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning mb-1">
                                 <i class="fas fa-edit"></i>
                                 Edit
-                            </a>
+                            </a>*@
                             <a href="#" class="btn btn-danger" data-delete-id="@item.Id" data-delete-name="Comment #@item.Id" data-delete-action="@Url.Action("Delete")">
                                 <i class="fas fa-trash"></i>
                                 Delete

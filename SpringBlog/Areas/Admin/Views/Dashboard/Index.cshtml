@@ -18,10 +18,13 @@
             @SmallBox(Model.UserCount.ToString(), "Users", "#", "bg-warning", "fas fa-users")
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-6">
+        @*<div class="col-lg-3 col-6">
             @SmallBox(Model.AdminCount.ToString(), "Admins", "#", "bg-danger", "fas fa-user-secret")
-        </div>
+        </div>*@
         <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            @SmallBox(Model.CommentCount.ToString(), "Comments", Url.Action("Index", "Comments"), "bg-light", "fas fa-comments")
+        </div>
     </div>
     <!-- /.row -->
 </div>

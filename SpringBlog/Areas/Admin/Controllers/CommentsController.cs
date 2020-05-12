@@ -24,5 +24,16 @@ namespace SpringBlog.Areas.Admin.Controllers
             db.SaveChanges();
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var comment = db.Comments.Find(id);  //yorumu bul
+            db.Comments.RemoveRange(comment.Children);      //çocuklarını kaldır
+            db.Comments.Remove(comment);        //kendini kaldır
+            db.SaveChanges();                   //kaydet
+
+            return RedirectToAction("Index");
+        }
     }
 }

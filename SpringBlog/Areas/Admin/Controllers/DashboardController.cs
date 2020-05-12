@@ -17,7 +17,8 @@ namespace SpringBlog.Areas.Admin.Controllers
                 CategoryCount = db.Categories.Count(),
                 PostCount = db.Posts.Count(),
                 UserCount = db.Users.Count(),
-                AdminCount = db.Roles.FirstOrDefault(x => x.Name == "admin").Users.Count()
+                //AdminCount = db.Roles.FirstOrDefault(x => x.Name == "admin").Users.Count()
+                CommentCount = db.Comments.Count()
             };
             return View(vm);
         }

@@ -32,3 +32,7 @@
     padding-bottom: 55px;
     background-color:gainsboro;
 }
+
+input[type="text"], input[type="password"] {
+    max-width: 280px;
+}

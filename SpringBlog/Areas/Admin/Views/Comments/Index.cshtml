@@ -1,0 +1,94 @@
+﻿@model List<Comment>
+@{
+    ViewBag.Title = "Comments";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Manage Comments</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table data-table="true" data-table-sort-column="0" data-table-sort-order="desc" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Content</th>
+                    <th>Author</th>
+                    <th>Post Title</th>
+                    <th>Creation Time</th>
+                    <th>Is Published</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Content</td>
+                        <td>@item.Author.DisplayName</td>
+                        <td>@item.Post.Title</td>
+                        <td>@item.CreationTime.Value</td>
+                        <td>
+                            @Html.CheckBox("IsPublished", item.State == CommentState.Approved, new {
+                                 data_bootstrap_switch = "",
+                                 data_off_color= "danger",
+                                 data_on_color="success",
+                                 data_off_text = "NO",
+                                 data_on_text = "YES",
+                                 data_comment_id = item.Id
+
+                             })
+                            @* https://bttstrp.github.io/bootstrap-switch/options.html *@
+                            @*<input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger"
+                                   data-on-color="success" data-on-text="YES" data-off-text="NO">*@
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">
+                                <i class="fas fa-edit"></i>
+                                Edit
+                            </a>
+                            <a href="#" class="btn btn-danger" data-delete-id="@item.Id" data-delete-name="Comment #@item.Id" data-delete-action="@Url.Action("Delete")">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+@Html.Partial("_DeleteModalPartial")
+
+@section scripts {
+    <script>
+        $("input[data-bootstrap-switch]").each(function () {
+
+            var state = $(this).prop('checked');
+            var checkbox = this;
+
+            $(this).bootstrapSwitch({
+                state: state,       //sıralamadan dolayı önce event dedik. direk state deseydik event olurdu 2.ye girmezdi
+                onSwitchChange: function (event, state) {
+                 //$(checkbox).bootstrapSwitch("state", !state, true);
+                    var isPublished = state;
+                    var commentId = $(this).data("comment-id");  //ajax isteği oluşturmak için 2 değer aldık. un ve şeker hazır helva yapalım
+                                                //              şu datayı                               changestate e post et. gelen datayla şunları yap
+                    $.post("@Url.Action("ChangeState")", { id: commentId, isPublished: isPublished }, function (data) {
+                        //backend kısmı. go to CommentsController. create ChangeState 
+                        //successfull
+                        //$(checkbox).bootstrapSwitch("state", state, true);
+                    }).fail(function (xhr, status, error) {
+                        //error: change back to old state before the event
+                        $(checkbox).bootstrapSwitch("state", !state,true);
+                    });
+                }
+            });
+        });
+    </script>
+}

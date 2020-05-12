@@ -1,10 +1,24 @@
 ﻿$(function () {
     bsCustomFileInput.init();
 
-    $('table[data-table="true"]').DataTable({
-        "responsive": true,
-        "autoWidth": false,
+ 
+
+    $('table[data-table="true"]').each(function (index) {
+
+                                         //bunu al   false ise   asc yi al
+        var sortOrder = $(this).data("table-sort-order") || "asc";
+        //Comments Index.cshtml de <table data-table="true" data-table-sort-column="0" değerini al
+        var sortColumn = $(this).data("table-sort-column") || 0;       //1 olsa image ye göre sıralardı tersten
+        $(this).DataTable({
+            // ilkinde kaçıncı sütun
+            "order": [[sortColumn, sortOrder]],
+            "responsive": true,
+            "autoWidth": false,
+        });
+
     });
+
+   
 
     $('textarea[data-snote="true"]').summernote({
         height: 200

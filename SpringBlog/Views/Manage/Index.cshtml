@@ -162,7 +162,9 @@
 
                 reader.onload = function (e) {          //dosya okuması bittğinde bunu calıstır.
                     if (cropper == null)                 //ilk okuma anında null sa croppie yi başlat.
-                        cropper = $('.cropper').croppie();
+                        cropper = $('.cropper').croppie({
+                            enableOrientation:true
+                        });
 
                     cropper.croppie('bind', {               //okunan bir resimse base64 olarak img yer alıyor. bunu croppie e bağla. js olarak dahil edicez.. cropper class lı resmin içinde dahil et.
                         url: e.target.result

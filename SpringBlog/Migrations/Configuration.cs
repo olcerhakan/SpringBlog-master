@@ -28,14 +28,14 @@ namespace SpringBlog.Migrations
                 manager.Create(role);
             }
 
-            if (!context.Users.Any(u => u.UserName == "hakanolcer1@gmail.com"))
+            if (!context.Users.Any(u => u.UserName == "hakanolcer7@gmail.com"))
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
                 var user = new ApplicationUser
                 {
-                    UserName = "hakanolcer1@gmail.com",
-                    Email = "hakanolcer1@gmail.com",
+                    UserName = "hakanolcer7@gmail.com",
+                    Email = "hakanolcer7@gmail.com",
                     DisplayName = "Hakan Ö.",
                     EmailConfirmed = true
                 };

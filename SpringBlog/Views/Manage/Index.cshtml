@@ -138,6 +138,9 @@
 @section scripts {
 
     <script>
+        //https://foliotek.github.io/Croppie/
+        //https://codepen.io/yigith/pen/NWGxGXg
+
         var cropper = null;
 
         $("#file-input").change(function () {
@@ -163,11 +166,14 @@
                 reader.onload = function (e) {          //dosya okuması bittğinde bunu calıstır.
                     if (cropper == null)                 //ilk okuma anında null sa croppie yi başlat.
                         cropper = $('.cropper').croppie({
-                            enableOrientation:true
+                            enableOrientation: true          //yatay ve dikey oryantasyon yönelim
+                            //circle: true,                                                     Yuvarlak Kırpma
+                            //viewport : {width:100 , height:100 , type: 'circle'} type: 'square'  buda kare.
                         });
 
                     cropper.croppie('bind', {               //okunan bir resimse base64 olarak img yer alıyor. bunu croppie e bağla. js olarak dahil edicez.. cropper class lı resmin içinde dahil et.
                         url: e.target.result
+                        // orientation:       yatay dikeyle başlat ayarı  :2 yatay olarak döndür  3: ayna gibi yap tam ters görüntü  5: yatay olarak döndr sonra 90 derece döndür .  default u 1 . yatay dikeyliğini exif bilgisinden alıyor. 
                     });
                 }
 

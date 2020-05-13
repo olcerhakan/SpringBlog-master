@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
@@ -23,9 +25,14 @@ namespace SpringBlog.Helpers
             mail.Subject = subject;
             mail.Body =body;
             mail.IsBodyHtml = true;  //gmail
-
-            using (var smtpClient = new SmtpClient("hakanolcer.xyz"))
+                                               //  "hakanolcer.xyz" bunu sildik.webconfig host ta zaten giriyoruz
+            using (var smtpClient = new SmtpClient())
             {
+                smtpClient.Credentials = new NetworkCredential(
+                    ConfigurationManager.AppSettings["mailAccount"], 
+                    ConfigurationManager.AppSettings["mailPassword"]
+                    
+                 );
                await smtpClient.SendMailAsync(mail);
                 //async oldugu icin awaitle cagırırız. bunu çağırınca mail sunucu geç cevap verdi . o 1 dk boyunca bu işlem sonucunu beklet. sunucu başka işlemler yapıyor. await olması için async metot olmalı ve await in kullandıgı metot Async kelimesi geçmeli
             }

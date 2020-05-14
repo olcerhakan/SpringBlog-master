@@ -20,7 +20,7 @@ namespace SpringBlog.Helpers
             //SmtpClient smtpClient = new SmtpClient("hakanolcer.xyz");
 
 
-            mail.From = new MailAddress("deneme@hakanolcer.xyz");
+            mail.From = new MailAddress(ConfigurationManager.AppSettings["mailAccount"], "Spring Blog");
             mail.To.Add(destination);
             mail.Subject = subject;
             mail.Body =body;

@@ -2076,6 +2076,7 @@
     <Content Include="Areas\Admin\Views\Comments\Index.cshtml" />
     <Content Include="Content\croppie.min.css.map" />
     <Content Include="ConnectionStrings.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2230,7 +2231,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\AdminBase\" />
     <Folder Include="Areas\Admin\Views\Slug\" />
-    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>

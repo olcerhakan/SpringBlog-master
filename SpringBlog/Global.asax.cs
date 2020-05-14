@@ -19,5 +19,7 @@ namespace SpringBlog
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             IdentityHelpers.SeedRolesAndUsers();
         }
+
+
     }
 }
